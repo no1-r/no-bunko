@@ -753,23 +753,17 @@
       const liked = isLiked(index);
       const likes = getLikes(index);
       btn.classList.toggle('liked', liked);
-      icon.textContent = liked ? '❤️' : '🤍';
+      icon.textContent = likes > 0 ? '❤️' : '🤍';
       count.textContent = likes > 0 ? likes + ' いいね' : '';
     }
     function toggleHeart() {
       if (currentIndex === null) return;
       const btn = document.getElementById('heart-btn');
-      const liked = isLiked(currentIndex);
       const likes = getLikes(currentIndex);
-      if (liked) {
-        localStorage.setItem('liked_' + currentIndex, '0');
-        localStorage.setItem('likes_' + currentIndex, Math.max(0, likes - 1));
-      } else {
-        localStorage.setItem('liked_' + currentIndex, '1');
-        localStorage.setItem('likes_' + currentIndex, likes + 1);
-        btn.classList.add('pop');
-        setTimeout(() => btn.classList.remove('pop'), 150);
-      }
+      localStorage.setItem('likes_' + currentIndex, likes + 1);
+      localStorage.setItem('liked_' + currentIndex, '1');
+      btn.classList.add('pop');
+      setTimeout(() => btn.classList.remove('pop'), 150);
       updateHeartUI(currentIndex);
     }
 
