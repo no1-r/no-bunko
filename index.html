@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>私の小説集</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #FDFAF6;
+      --card-bg:   #F5EFE6;
+      --accent:    #C8A47A;
+      --accent2:   #E8D5C0;
+      --text:      #3D2B1F;
+      --sub:       #9E7B5A;
+      --divider:   #E2D3C3;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      min-height: 100vh;
+    }
+
+    /* ── ヘッダー ── */
+    header {
+      text-align: center;
+      padding: 64px 24px 48px;
+      border-bottom: 1px solid var(--divider);
+      position: relative;
+    }
+    header::after {
+      content: '';
+      display: block;
+      width: 48px;
+      height: 2px;
+      background: var(--accent);
+      margin: 24px auto 0;
+    }
+    .site-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--text);
+    }
+    .site-subtitle {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      letter-spacing: 0.22em;
+      color: var(--sub);
+      text-transform: uppercase;
+    }
+
+    /* ── メインレイアウト ── */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 56px 24px 100px;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      color: var(--sub);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    /* ── 小説カード ── */
+    .novel-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .novel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--divider);
+      border-radius: 4px;
+      padding: 32px 36px;
+      cursor: pointer;
+      transition: box-shadow 0.25s, border-color 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .novel-card::before {
+      content: '❧';
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 1.1rem;
+      color: var(--accent2);
+    }
+    .novel-card:hover {
+      box-shadow: 0 4px 20px rgba(200, 164, 122, 0.18);
+      border-color: var(--accent);
+    }
+    .novel-card:hover .novel-title {
+      color: var(--accent);
+    }
+
+    .novel-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .novel-genre {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      color: var(--sub);
+      background: var(--accent2);
+      padding: 2px 10px;
+      border-radius: 2px;
+    }
+    .novel-date {
+      font-size: 0.72rem;
+      color: var(--sub);
+    }
+
+    .novel-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      margin-bottom: 14px;
+      transition: color 0.2s;
+    }
+    .novel-synopsis {
+      font-size: 0.88rem;
+      color: var(--sub);
+      line-height: 1.9;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 18px;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .novel-card:hover .read-link {
+      border-color: var(--accent);
+    }
+
+    /* ── 小説詳細ページ (overlay) ── */
+    .reader-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 100;
+      overflow-y: auto;
+    }
+    .reader-overlay.open { display: block; }
+
+    .reader-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 56px 28px 100px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      color: var(--sub);
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+    .back-btn:hover { color: var(--accent); }
+
+    .reader-genre {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      color: var(--sub);
+      background: var(--accent2);
+      padding: 2px 10px;
+      border-radius: 2px;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    .reader-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .reader-date {
+      font-size: 0.75rem;
+      color: var(--sub);
+      margin-bottom: 36px;
+    }
+    .reader-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--accent);
+      margin-bottom: 36px;
+    }
+    .reader-body {
+      font-size: 1rem;
+      line-height: 2.2;
+      color: var(--text);
+      white-space: pre-wrap;
+    }
+    .reader-body p { margin-bottom: 1.6em; }
+
+    /* ── フッター ── */
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      border-top: 1px solid var(--divider);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      color: var(--sub);
+    }
+
+    @media (max-width: 600px) {
+      .novel-card { padding: 24px 20px; }
+      .reader-inner { padding: 40px 20px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header>
+    <p class="site-subtitle">Novel Collection</p>
+    <h1 class="site-title">私の小説集</h1>
+  </header>
+
+  <!-- 小説一覧 -->
+  <main id="list-view">
+    <p class="section-label">作品一覧</p>
+    <div class="novel-list" id="novel-list"></div>
+  </main>
+
+  <!-- 読書ページ (overlay) -->
+  <div class="reader-overlay" id="reader-overlay">
+    <div class="reader-inner">
+      <button class="back-btn" onclick="closeReader()">← 一覧に戻る</button>
+      <span class="reader-genre" id="r-genre"></span>
+      <h2 class="reader-title" id="r-title"></h2>
+      <p class="reader-date" id="r-date"></p>
+      <div class="reader-divider"></div>
+      <div class="reader-body" id="r-body"></div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 私の小説集 ― すべての作品は著作者に帰属します
+  </footer>
+
+  <script>
+    // =========================================================
+    // 📖 ここに小説データを追加してください
+    // =========================================================
+    const novels = [
+      {
+        title: "春の雨が止む頃に",
+        genre: "恋愛",
+        date: "2025年3月15日",
+        synopsis: "同じ傘を持つ見知らぬ二人が、雨の日の偶然から始まる静かな恋を綴った短編。桜が散り終える頃、ようやく言葉にできた気持ちとは。",
+        body: `　四月の雨は、いつも柔らかい。
+
+　駅のホームで、彼女は同じ柄の傘を持つ男に気がついた。濃紺に白い小花——どこにでもありそうで、でも並べてみるとすこし特別に見える。
+
+　「傘、同じですね」
+
+　思わず声に出してしまってから、彼女は少し恥ずかしくなった。見知らぬ人に話しかけるなんて、らしくない。でも彼は驚いた顔をして、それからゆっくりと微笑んだ。
+
+　「本当ですね。こんな一致もあるんですね」
+
+　それだけの会話だった。電車が来て、お互い別々の車両に乗り込んで、その日は終わった。
+
+　でも翌週の月曜日、また雨が降って、また同じホームで彼を見かけた。
+
+　今度は彼のほうが先に気づいて、すこし手を挙げた。まるで友人に挨拶するみたいに、自然に。
+
+　そうやって、雨の日だけ二人は話すようになった。
+
+　桜が散り終えた五月の終わり、久しぶりに雨が降った日。彼はホームで傘をたたみながら言った。
+
+　「晴れの日にも、会えますか」
+
+　雨音が、すこし遠くなった気がした。`
+      },
+      {
+        title: "夜明け前のコーヒー",
+        genre: "恋愛",
+        date: "2025年5月2日",
+        synopsis: "深夜の喫茶店で毎晩同じ席に座る二人。言葉を交わすより先に、コーヒーの温度が心を繋いでいた。",
+        body: `　午前三時の喫茶店は、世界から切り離されたような静けさがある。
+
+　カウンター奥の席に、彼はいつもいた。ブラックのコーヒーと、文庫本。眼鏡のレンズに黄色い灯りが映っている。
+
+　美雪が「夜型なもので」と常連になったのは半年前。マスターが何も聞かずにカフェオレを出してくれるようになった頃から、彼もいつもいた。
+
+　最初は挨拶だけ。それからすこしずつ、言葉が増えた。本の話、雨の話、眠れない夜の話。
+
+　ある夜、彼がカップを両手で包みながら言った。
+
+　「コーヒーって、冷める前に飲み終わるのが惜しい気がするんです。ずっとこのままでいられたらいいのに、と思いながら飲んでしまう」
+
+　美雪は少し笑った。「私もそうです。毎回、飲み終わるのが早すぎる」
+
+　しばらく沈黙が続いて、窓の外が白みはじめた。
+
+　「もう一杯、つき合ってもらえますか」
+
+　マスターがこっそり微笑んでいるのを、二人は気づかなかった。`
+      },
+      {
+        title: "きみに届く手紙",
+        genre: "恋愛",
+        date: "2025年6月10日",
+        synopsis: "引っ越しの荷物の中から出てきた、差出人不明の古い手紙。消印は十年前。読み進めるうちに、手紙の相手が今の隣人だと気がついた。",
+        body: `　段ボールの底から出てきたとき、封筒はすでに少し黄ばんでいた。
+
+　差出人の欄は空白。宛名だけがある——「305号室の、あなたへ」。
+
+　引っ越してきたばかりの柚香は、首を傾げながら封を開けた。消印は、十年前の秋。
+
+　手紙には、小さな字でこう書いてあった。
+
+　〈あなたが毎朝ベランダで伸びをするのを、向かいの窓から見ていました。失礼だとわかっているのに、やめられませんでした。もう引っ越してしまうので、許してください。でもせめて一度、おはようと言えればよかった〉
+
+　柚香はしばらく手紙を見つめた。
+
+　翌朝、ベランダに出ると、向かいの306号室の窓が開いた。中から出てきた男が、洗濯物を干しながら気づいて軽く会釈した。
+
+　なんとなく、聞いてみた。「ここ、長いですか」
+
+　「十一年になります」と彼は答えた。
+
+　柚香は少し迷ってから、手紙を持ったまま言った。「これ、もしかして……」
+
+　彼の顔が、ゆっくりと赤くなった。`
+      }
+    ];
+    // =========================================================
+
+    function renderList() {
+      const container = document.getElementById('novel-list');
+      container.innerHTML = novels.map((n, i) => `
+        <article class="novel-card" onclick="openReader(${i})">
+          <div class="novel-meta">
+            <span class="novel-genre">${n.genre}</span>
+            <span class="novel-date">${n.date}</span>
+          </div>
+          <h2 class="novel-title">${n.title}</h2>
+          <p class="novel-synopsis">${n.synopsis}</p>
+          <span class="read-link">続きを読む →</span>
+        </article>
+      `).join('');
+    }
+
+    function openReader(index) {
+      const n = novels[index];
+      document.getElementById('r-genre').textContent = n.genre;
+      document.getElementById('r-title').textContent = n.title;
+      document.getElementById('r-date').textContent = n.date;
+      document.getElementById('r-body').innerHTML =
+        n.body.split('\n\n').map(p => `<p>${p}</p>`).join('');
+      document.getElementById('reader-overlay').classList.add('open');
+      window.scrollTo(0, 0);
+    }
+
+    function closeReader() {
+      document.getElementById('reader-overlay').classList.remove('open');
+    }
+
+    renderList();
+  </script>
+</body>
+</html>
