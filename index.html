@@ -23,12 +23,24 @@
     .theme-toggle { position: absolute; top: 20px; right: 20px; background: var(--card-bg); border: 1px solid var(--divider); border-radius: 50px; padding: 6px 14px; cursor: pointer; font-size: 0.8rem; color: var(--sub); font-family: 'Noto Sans JP', sans-serif; display: flex; align-items: center; gap: 6px; transition: background 0.2s, border-color 0.2s, color 0.2s; }
     .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
     main { max-width: 860px; margin: 0 auto; padding: 56px 24px 100px; }
-    .section-label { font-size: 0.72rem; letter-spacing: 0.3em; color: var(--sub); text-transform: uppercase; margin-bottom: 28px; }
+
+    /* ── 並び替えバー ── */
+    .list-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+    .section-label { font-size: 0.72rem; letter-spacing: 0.3em; color: var(--sub); text-transform: uppercase; }
+    .sort-btns { display: flex; gap: 8px; }
+    .sort-btn { background: none; border: 1px solid var(--divider); border-radius: 50px; padding: 4px 14px; font-size: 0.72rem; letter-spacing: 0.1em; color: var(--sub); font-family: 'Noto Sans JP', sans-serif; cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+    .sort-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .sort-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* ── 小説カード ── */
     .novel-list { display: flex; flex-direction: column; gap: 20px; }
     .novel-card { background: var(--card-bg); border: 1px solid var(--divider); border-radius: 4px; padding: 32px 36px; cursor: pointer; transition: box-shadow 0.25s, border-color 0.25s; position: relative; overflow: hidden; }
-    .novel-card::before { content: '❧'; position: absolute; top: 16px; right: 20px; font-size: 1.1rem; color: var(--accent2); }
     .novel-card:hover { box-shadow: 0 4px 20px rgba(200,164,122,0.18); border-color: var(--accent); }
     .novel-card:hover .novel-title { color: var(--accent); }
+
+    /* NEW! バッジ */
+    .new-badge { position: absolute; top: 12px; right: 16px; background: #e05070; color: #fff; font-size: 0.62rem; font-weight: 500; letter-spacing: 0.12em; padding: 2px 10px; border-radius: 50px; font-family: 'Noto Sans JP', sans-serif; }
+
     .novel-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
     .novel-genre { font-size: 0.68rem; letter-spacing: 0.18em; color: var(--sub); background: var(--accent2); padding: 2px 10px; border-radius: 2px; }
     .novel-date { font-size: 0.72rem; color: var(--sub); }
@@ -36,6 +48,8 @@
     .novel-synopsis { font-size: 0.88rem; color: var(--sub); line-height: 1.9; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .read-link { display: inline-block; margin-top: 18px; font-size: 0.78rem; letter-spacing: 0.2em; color: var(--accent); border-bottom: 1px solid transparent; transition: border-color 0.2s; }
     .novel-card:hover .read-link { border-color: var(--accent); }
+
+    /* ── 読書ページ ── */
     .reader-overlay { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 100; overflow-y: auto; }
     .reader-overlay.open { display: block; }
     .reader-inner { max-width: 680px; margin: 0 auto; padding: 56px 28px 100px; }
@@ -73,7 +87,13 @@
     <h1 class="site-title">のあーる文庫</h1>
   </header>
   <main>
-    <p class="section-label">作品一覧</p>
+    <div class="list-header">
+      <p class="section-label">作品一覧</p>
+      <div class="sort-btns">
+        <button class="sort-btn active" id="btn-new" onclick="setSort('new')">新しい順</button>
+        <button class="sort-btn" id="btn-old" onclick="setSort('old')">古い順</button>
+      </div>
+    </div>
     <div class="novel-list" id="novel-list"></div>
   </main>
   <div class="reader-overlay" id="reader-overlay">
@@ -99,7 +119,6 @@
   </div>
   <button class="reader-theme-toggle" id="reader-theme-toggle" onclick="toggleTheme()">
     <span id="reader-theme-icon">🌙</span>
-    <span id="reader-theme-label">夜モード</span>
   </button>
   <footer>&copy; 2026 のあーる文庫 ― 掲載されている作品の権利は、著作者に帰属します</footer>
   <script>
@@ -113,29 +132,68 @@
         body: `恋人の通知が嫌いだった\n\n　『起きた？』\n\n　七時八分\n\n　『今日、暑いらしいよ』\n\n　七時十二分\n\n　『そういえば駅前のパン屋さん、新作出たんだって』\n\n　七時十五分\n\n　パン屋の新作なんて、僕の人生に何の影響もない\n\n　どうせ夜には通話するのに、と思っていた\n\n　そのとき話せばいいことを、わざわざ細切れにして送りつけてくる\n\n　僕は通知欄を見下ろして、小さく舌打ちした\n\n　それでも返信はする\n\n　「起きた」\n\n　「へえ」\n\n　「そうなんだ」\n\n　僕の返事は、どれも賞味期限切れの相槌みたいだった\n\n　恋人は、それでも懲りなかった\n\n　『お昼なに食べるの？』\n\n　『今日の授業眠い』\n\n　『猫いた』\n\n　猫の写真が送られてくる\n\n　たしかに、驚くほど嫌そうな顔をしていた\n\n　思わず笑ってしまって、慌てて口元を引き締める\n\n　負けた気がしたからだ\n\n　何に対してなのかは、自分でもよくわからなかった\n\n　…愛されるということは、もっと劇的なものだと思っていた\n\n　花束とか、記念日とか、改札越しの抱擁とか\n\n　少なくとも、\n\n　『コンビニでアイス買った』\n\n　『歯医者行きたくない』\n\n　『電車座れた』\n\n　みたいなものではないと思っていた\n\n　そんなものは"愛"じゃなくて、ただの"生活"だ\n\n　人の暮らしが、しずくのように自分の脳へこぼれ落ちてくるだけ\n\n　だから鬱陶しかった\n\n　…ある日、通知が来なかった\n\n　昼になっても\n\n　夕方になっても\n\n　夜になっても\n\n　どうせ夜には通話するのに、と思っていたはずなのに\n\n　二十二時を過ぎても着信はなかった\n\n　僕はスマホを裏返した\n\n　また表にした\n\n　裏返した\n\n　表にした\n\n　修学旅行が楽しみで眠れない子供みたいで、ひどく馬鹿らしかった\n\n　結局、僕のほうから電話をかけた\n\n『……もしもし？』\n\n『…ごめん！スマホ壊れてた！』\n\n　受話口の向こうで、恋人は息を切らしていた\n\n『修理出してて、今やっと代替機もらえたの』\n\n「……そう」\n\n『怒ってる？』\n\n「別に」\n\n『寂しかった？』\n\n「……少し」\n\n　沈黙のあと、恋人が笑った\n\n『嬉しい』\n\n「なんで」\n\n『だって、いつも通知うるさそうだから』\n\n「うるさいよ」\n\n『え』\n\n「今日暑いね、とか」\n\n『うん』\n\n「猫いた、とか」\n\n『うん』\n\n「お昼なに食べたの、とか」\n\n『うん』\n\n「どうせ夜に通話するのに」\n\n『……うん』\n\n「でも」\n\n　言葉が止まる\n\n　愛はもっと、大きなものだと思っていた\n\n　誰かの人生を変えるような出来事とか\n\n　忘れられない記念日とか\n\n　そういうものだと\n\n　でも実際は違った\n\n　今日の昼ごはんとか\n\n　駅前の猫とか\n\n　授業中に眠かったこととか\n\n　コンビニで見つけた新作アイスとか\n\n　誰かの一日に名前をつけるには小さすぎるものばかりだった\n\n『じゃあ、お昼の写真送って』\n\n「なんで」\n\n『見たいから』\n\n「ただの学食のカレーだよ」\n\n『それでも』\n\n　通話の向こうで、恋人は笑った\n\n　僕はスマホを耳に当てたまま、明日の昼のことを考える\n\n　たぶん学食に行く\n\n　たぶんいつもの席に座る\n\n　たぶん代わり映えのしないカレーを頼む\n\n　どうせ夜には通話するのに\n\n　そんなこと、そのとき話せばいいのに\n\n　それでも、僕はきっと写真を撮る\n\n　湯気の立つカレーを、少しだけ遠くから\n\n　スプーンが写り込まないように気をつけて\n\n　もしかしたら、\n\n　「今日は唐揚げも付けた」なんて一言を添えるかもしれない\n\n　誰かに見せるほどのものじゃない\n\n　わざわざ共有するほどの出来事でもない\n\n　でも、たぶん\n\n　僕にとっての愛は、昼食の写真を送ることになった\n\n　どうせ、夜には通話するのに\n\n　それでも送ってしまうような、取るに足らないこと\n\n　そんな些細なものに形を変えて、いつの間にか僕の生活の中に居座っていた\n\n『ねえ』\n\n『明日、カレーだったら写真忘れないでね』\n\n「……わかった」\n\n　そう返事をしながら\n\n　明日は少し、美味しそうに撮れるといいなと思った`
       },
       {
-        title: "5分後に僕が死ぬ話",
-        genre: "青春",
-        date: "2026年4月4日",
-        flower: true,
-        synopsis: "学校の屋上で「5分後に僕は死ぬ」と語り始める主人公。これまでの人生を振り返る中で、彼の心は少しずつ揺れ動いていく。5分後に待つ結末とは。",
-        body: `5分後に僕は死ぬ\n\nそんな言葉だけ切り取ったら、ドラマみたいだと思う\n\n学校の屋上にひとり\n\nフェンスの向こう側に立って、春とも夏ともつかないぬるい風を受けながら、僕は腕時計のタイマーを見つめていた\n\n残り、5分\n\n案外、空は青い\n\nもっと雨とか降ってくれたらよかったのに\n\nこんな日に死ぬなんて、空気が読めなさすぎる\n\n僕は笑った\n\n笑ったつもりだった\n\n頬はうまく動かなかったけれど\n\n中学受験、受かりたかったな\n\n親のあんな顔、初めて見た\n\n「大丈夫だよ」\n\nそう言いながら母さんは泣きそうで\n\n父さんは「次がある」と言いながら、しばらく僕の顔を見なかった\n\n期待されていたんだと思う\n\n僕も期待していた\n\n自分ならできるって\n\nだけど落ちた\n\nたったそれだけのことなのに\n\nたったそれだけのことだったはずなのに\n\n地元の中学に入ってから、僕は少しずつだめになっていった\n\n授業中はぼーっとして\n\nテストの順位は下がって\n\n友達と話していても、どこか上の空で\n\n前はできていたことが、できなくなった\n\n頑張ろうと思うほど空回りして\n\n気づけば「頑張れ」が嫌いになっていた\n\n残り4分12秒\n\nそういえば、漫画家になりたかった\n\n小学生の頃、ノートの隅にずっと絵を描いていた\n\n休み時間になるたびに友達に見せて\n\n「続きは？」\n\nなんて言われるのが嬉しかった\n\n世界で一番面白い物語を描ける気がしていた\n\nだけど中学になって、高校になって\n\n自分より上手い人なんて山ほどいることを知った\n\nSNSには神様みたいな絵を描く人が溢れていた\n\n才能って残酷だ\n\n努力じゃ届かない場所があることを知ってしまった\n\nああ\n\n才能さえあればな\n\n才能さえあれば、もっと違う人生だったのかな\n\n残り3分\n\n彼女もできなかった\n\n文化祭も、体育祭も\n\n青春らしい青春なんてなかった\n\nクラスメイトのインスタを見れば、みんな楽しそうで\n\n旅行して\n\n恋愛して\n\n笑っていて\n\nどうして僕だけ置いていかれるんだろうって思った\n\nいや\n\n違うか\n\nみんな、それぞれ苦しかったのかもしれない\n\nでも僕には、そうは見えなかった\n\n僕だけが失敗作みたいだった\n\n残り2分18秒\n\n死ぬべきってことなんだろうな\n\n受験も失敗して\n\n夢も諦めて\n\n何者にもなれなくて\n\nこんな僕が生きてたって\n\n仕方ないんじゃないか\n\n誰にも必要とされてないんじゃないか\n\nそう思ったから、ここに来た\n\nそう決めたはずだった\n\nなのに\n\n残り1分\n\n怖い\n\n急に怖くなった\n\n鉄筋にしがみつく手が震える\n\n冷や汗が止まらない\n\n風が吹くたび、肌が粟立つ\n\n気持ち悪い\n\n吐きそうだ\n\n心臓がうるさい\n\n嫌だ\n\n嫌だ\n\n嫌だ嫌だ嫌だ\n\n死にたくない\n\n残り30秒\n\nやめよう\n\n死ぬなんて\n\n馬鹿だった\n\n何やってるんだ僕\n\nまだ間に合う\n\nまだやり直せる\n\n高校を卒業して\n\nバイトして\n\n専門学校に行ったっていい\n\n漫画だって趣味で描けばいい\n\n親に謝ろう\n\n泣きながらでも謝ろう\n\nもう一回頑張ろう\n\n生きよう\n\n生きたい\n\n残り10秒\n\n5\n\n4\n\n3\n\n2\n\n1\n\n腕時計のタイマーが鳴る\n\n僕は大きく深呼吸をした\n\n肺いっぱいに空気を吸い込む\n\n生きよう\n\n今度こそ\n\nちゃんと生きよう\n\nそう決めた\n\nそして\n\nようやく気づいた\n\nどうしてこんなに寒いのか\n\nどうして体が動かないのか\n\nどうして視界の端が赤く滲んでいるのか\n\nどうして呼吸のたびに、喉の奥から鉄の味がするのか\n\n僕は屋上にいなかった\n\nコンクリートの上だった\n\n仰向けに倒れていた\n\nぐしゃぐしゃに折れた腕\n\n動かない足\n\n遠くで誰かの悲鳴が聞こえる\n\nああ\n\nそうか\n\n僕は\n\nもう飛んでいたんだ\n\nこれは屋上で迷っていた5分間じゃない\n\n飛び降りたあと\n\n打ちどころが悪くて、即死できなかった僕が見ていた\n\nたった5分の回想だった\n\n生きたいと思ったのが遅すぎた\n\nやり直せると思ったのが遅すぎた\n\n残酷なくらい、遅すぎた\n\n視界がぼやける\n\n空だけがやけに青かった\n\n母さん、ごめん\n\n父さん、ごめん\n\n僕、本当は死にたくなかった\n\n漫画も、もう少し描きたかった\n\n大人になってみたかった\n\n明日が見たかった\n\n生きたかった\n\n腕時計の秒針が\n\n静かに\n\n最後の一秒を刻む\n\n5分後\n\n僕は死んだ\n\nそしてそのとき初めて\n\n僕は、生きたかったのだと知った`
-      },
-      {
         title: "どうせそれも愛だから。",
         genre: "恋愛",
         date: "2026年6月12日",
         flower: false,
         synopsis: "受験を前にすれ違う高校生カップル。会えない不安と伝えられない本音の先で、二人はコンビニの片隅で「愛」の形を知っていく。",
         body: `　十月の終わり、夕方の空気は少しだけ冷たくなっていて、吐く息も白くなりそうな季節だった\n\n「ねえ、だからさ。一年記念日くらい、ちょっとくらい会えないの？」\n\n　教室の隅、帰り支度をする生徒たちのざわめきの中で、真奈美は腕を組んだ\n\n　身長は高くない、むしろクラスでも小さい方だ。けれど、そんなことを感じさせないくらい態度は堂々としている\n\n「別に一日中遊ぼうって言ってるわけじゃないし。勉強するなら一緒に勉強したっていいじゃん。私、教えるし」\n\n　目の前の宏昌は、鞄に参考書を詰め込みながら視線を落とした\n\n「……」\n\n「ねえ、聞いてる？」\n\n「聞いてる」\n\n「じゃあ返事」\n\n「……受験近いし」\n\n「だから？」\n\n「だから、今は」\n\n　短い言葉ばかりだった\n\n　真奈美は眉をひそめる\n\n「私と会うの、そんなに嫌？」\n\n「そういうことじゃなくて」\n\n「じゃあ何」\n\n「……。」\n\n「またそれ」\n\n　沈黙\n\n　真奈美は舌打ちを飲み込んだ\n\n「私さ、最近ずっと思ってたんだけど」\n\n　宏昌が顔を上げる\n\n「本当に、私のこと好き？」\n\n　その一言に、宏昌の肩がぴくりと揺れた\n\n「……好きだよ」\n\n「口だけなら何とでも言える」\n\n「違う」\n\n「違わないじゃん、会おうともしてくれないのに」\n\n「……。」\n\n「もういい」\n\n　真奈美は鞄を乱暴に肩へかけた\n\n「宏昌のバカ」\n\n　そう言い捨てて、教室を出た\n\n　追いかけてくる足音はなかった\n\n＿＿＿＿＿＿\n\n　最低\n\n　駅までの道を歩きながら、真奈美は心の中で何度も呟いた\n\n　最低なのは宏昌だ\n\n　いや、もしかしたら自分かもしれない\n\n　でも\n\n（一年記念日だよ？）\n\n　付き合って一年\n\n　長いようで短い時間だった\n\n　嬉しかったことも、喧嘩したことも、全部積み重ねてきた\n\n　だからこそ、不安になる\n\n　好きって言葉だけじゃ足りない日もある\n\n　会いたい\n\n　顔を見たい\n\n　自分だけがそう思っているんじゃないかって、怖くなる\n\n「……萎える」\n\n　ぽつりと呟いて、真奈美は家路についた\n\n＿＿＿＿＿＿\n\n　一方その頃\n\n　宏昌は教室に残っていた\n\n　開いた参考書の文字は、まるで頭に入ってこない\n\n（まただ）\n\n　ペンを握る手に力が入る\n\n　勉強は得意じゃない\n\n　夏までは何とかなると思っていた\n\n　でも秋になって、模試の判定を見て、ようやく現実が見えた\n\n　遅れている\n\n　焦っている\n\n　情けない\n\n　真奈美は頭がいい\n\n　きっと一緒に勉強したら教えてくれる\n\n　でも\n\n（嫌なんだ…）\n\n　分からない問題を前に焦る姿も\n\n　余裕がなくてイライラする姿も\n\n　情けない自分も\n\n　全部見せたくなかった\n\n　真奈美には、格好悪い彼氏でいたくなかった\n\n「……ちゃんと言えばよかった」\n\n　そう呟いた頃には、外はすっかり暗くなっていた\n\n＿＿＿＿＿＿\n\n　家の近くのコンビニ\n\n　自動ドアが開いた瞬間\n\n「あ」\n\n「あ」\n\n　二人の声が重なった\n\n　沈黙\n\n「……。」\n\n「……。」\n\n「……何してんの」\n\n「アイス買いに…」\n\n「私も…」\n\n「……。」\n\n「……。」\n\n　気まずい\n\n　さっきまで喧嘩していた相手と、近所のコンビニで鉢合わせるなんて\n\n　しかもアイス売り場の前で\n\n「それ、いつも食べてるやつじゃん」\n\n「……真奈美こそ」\n\n「何」\n\n「そのアイス…」\n\n「好きだから」\n\n「知ってる」\n\n「……。」\n\n　なんだそれ\n\n　真奈美は少しだけ吹き出しそうになった\n\n＿＿＿＿＿＿\n\n　コンビニの前\n\n　二人で並んでベンチに座る\n\n　秋の夜風は冷たいのに、アイスはちゃんと溶けていく\n\n「……勘違いしないでほしい」\n\n　ぽつりと、宏昌が言った\n\n「え？」\n\n「真奈美と会いたくないわけじゃない」\n\n「じゃあ何」\n\n「……情けないから」\n\n「は？」\n\n「俺、勉強できないし」\n\n　言葉を探すように、ゆっくり続ける\n\n「判定も良くないし、焦ってるし」\n\n「……。」\n\n「真奈美といると安心する。でも、そんな自分見せたくなかった」\n\n　真奈美は黙って聞いていた\n\n「迷惑かけたくないし」\n\n「……。」\n\n「格好悪いって思われたくなくて」\n\n「……。」\n\n「だから、ちゃんと言えなかった」\n\n　沈黙\n\n　コンビニの明かりだけが、二人を照らしていた\n\n「……バカ」\n\n　真奈美は呟く\n\n「早く言ってくれれば…」\n\n　そこまで言って、口を閉じた\n\n　自分だって\n\n　不安ばかりぶつけて\n\n　怒って\n\n　勝手に決めつけた\n\n「私も、ごめん」\n\n「……。」\n\n「会えない＝好きじゃない、って思っちゃった」\n\n「違う」\n\n　即答だった\n\n　宏昌は真奈美を見る\n\n「会えなくても」\n\n　少し照れながら続ける\n\n「俺は真奈美のことが好きだから」\n\n「……。」\n\n「ちゃんと好き」\n\n「……。」\n\n「これからも」\n\n　真奈美は俯いた\n\n「……そういうの」\n\n「うん」\n\n「反則」\n\n「ごめん」\n\n「褒めてるの」\n\n「……そっか」\n\n「あと」\n\n「うん」\n\n「次からはちゃんと言って」\n\n「言う」\n\n「私も怒鳴る前に聞く」\n\n「助かる」\n\n「……。」\n\n「……。」\n\n「……一年記念日」\n\n「うん」\n\n「一時間だけでも…」\n\n「会おう」\n\n「勉強もする？」\n\n「……教えて」\n\n「仕方ないなあ〜」\n\n　真奈美は少しだけ笑った\n\n「ちゃんと教えてあげる」\n\n「お願いします」\n\n「でも、その代わり」\n\n「？」\n\n「アイス奢りね」\n\n「なんで…」\n\n「愛情料」\n\n「高くない？」\n\n「安いでしょ」\n\n　そう言って笑う真奈美は、少しだけ照れていた\n\n　気づけば、二人のアイスはすっかり溶け始めていた\n\n「うわ、やば」\n\n「早く食べなよ」\n\n「真奈美こそ」\n\n「言われなくても〜」\n\n　慌てて食べる二人の姿は、きっと傍から見れば少し間抜けだった\n\n　でも\n\n　好きだから不安になることも\n\n　格好悪い自分を隠したくなることも\n\n　うまく伝えられずにすれ違うことも\n\n　溶けていくアイスに慌てることも\n\n　全部\n\n　きっと\n\n　どうせそれも、愛だから\n\n　コンビニの明かりの下\n\n　並んで歩く二人の距離は、行きより少しだけ近くなっていた`
+      },
+      {
+        title: "5分後に僕が死ぬ話",
+        genre: "青春",
+        date: "2026年4月4日",
+        flower: true,
+        synopsis: "学校の屋上で「5分後に僕は死ぬ」と語り始める主人公。これまでの人生を振り返る中で、彼の心は少しずつ揺れ動いていく。5分後に待つ結末とは。",
+        body: `5分後に僕は死ぬ\n\nそんな言葉だけ切り取ったら、ドラマみたいだと思う\n\n学校の屋上にひとり\n\nフェンスの向こう側に立って、春とも夏ともつかないぬるい風を受けながら、僕は腕時計のタイマーを見つめていた\n\n残り、5分\n\n案外、空は青い\n\nもっと雨とか降ってくれたらよかったのに\n\nこんな日に死ぬなんて、空気が読めなさすぎる\n\n僕は笑った\n\n笑ったつもりだった\n\n頬はうまく動かなかったけれど\n\n中学受験、受かりたかったな\n\n親のあんな顔、初めて見た\n\n「大丈夫だよ」\n\nそう言いながら母さんは泣きそうで\n\n父さんは「次がある」と言いながら、しばらく僕の顔を見なかった\n\n期待されていたんだと思う\n\n僕も期待していた\n\n自分ならできるって\n\nだけど落ちた\n\nたったそれだけのことなのに\n\nたったそれだけのことだったはずなのに\n\n地元の中学に入ってから、僕は少しずつだめになっていった\n\n授業中はぼーっとして\n\nテストの順位は下がって\n\n友達と話していても、どこか上の空で\n\n前はできていたことが、できなくなった\n\n頑張ろうと思うほど空回りして\n\n気づけば「頑張れ」が嫌いになっていた\n\n残り4分12秒\n\nそういえば、漫画家になりたかった\n\n小学生の頃、ノートの隅にずっと絵を描いていた\n\n休み時間になるたびに友達に見せて\n\n「続きは？」\n\nなんて言われるのが嬉しかった\n\n世界で一番面白い物語を描ける気がしていた\n\nだけど中学になって、高校になって\n\n自分より上手い人なんて山ほどいることを知った\n\nSNSには神様みたいな絵を描く人が溢れていた\n\n才能って残酷だ\n\n努力じゃ届かない場所があることを知ってしまった\n\nああ\n\n才能さえあればな\n\n才能さえあれば、もっと違う人生だったのかな\n\n残り3分\n\n彼女もできなかった\n\n文化祭も、体育祭も\n\n青春らしい青春なんてなかった\n\nクラスメイトのインスタを見れば、みんな楽しそうで\n\n旅行して\n\n恋愛して\n\n笑っていて\n\nどうして僕だけ置いていかれるんだろうって思った\n\nいや\n\n違うか\n\nみんな、それぞれ苦しかったのかもしれない\n\nでも僕には、そうは見えなかった\n\n僕だけが失敗作みたいだった\n\n残り2分18秒\n\n死ぬべきってことなんだろうな\n\n受験も失敗して\n\n夢も諦めて\n\n何者にもなれなくて\n\nこんな僕が生きてたって\n\n仕方ないんじゃないか\n\n誰にも必要とされてないんじゃないか\n\nそう思ったから、ここに来た\n\nそう決めたはずだった\n\nなのに\n\n残り1分\n\n怖い\n\n急に怖くなった\n\n鉄筋にしがみつく手が震える\n\n冷や汗が止まらない\n\n風が吹くたび、肌が粟立つ\n\n気持ち悪い\n\n吐きそうだ\n\n心臓がうるさい\n\n嫌だ\n\n嫌だ\n\n嫌だ嫌だ嫌だ\n\n死にたくない\n\n残り30秒\n\nやめよう\n\n死ぬなんて\n\n馬鹿だった\n\n何やってるんだ僕\n\nまだ間に合う\n\nまだやり直せる\n\n高校を卒業して\n\nバイトして\n\n専門学校に行ったっていい\n\n漫画だって趣味で描けばいい\n\n親に謝ろう\n\n泣きながらでも謝ろう\n\nもう一回頑張ろう\n\n生きよう\n\n生きたい\n\n残り10秒\n\n5\n\n4\n\n3\n\n2\n\n1\n\n腕時計のタイマーが鳴る\n\n僕は大きく深呼吸をした\n\n肺いっぱいに空気を吸い込む\n\n生きよう\n\n今度こそ\n\nちゃんと生きよう\n\nそう決めた\n\nそして\n\nようやく気づいた\n\nどうしてこんなに寒いのか\n\nどうして体が動かないのか\n\nどうして視界の端が赤く滲んでいるのか\n\nどうして呼吸のたびに、喉の奥から鉄の味がするのか\n\n僕は屋上にいなかった\n\nコンクリートの上だった\n\n仰向けに倒れていた\n\nぐしゃぐしゃに折れた腕\n\n動かない足\n\n遠くで誰かの悲鳴が聞こえる\n\nああ\n\nそうか\n\n僕は\n\nもう飛んでいたんだ\n\nこれは屋上で迷っていた5分間じゃない\n\n飛び降りたあと\n\n打ちどころが悪くて、即死できなかった僕が見ていた\n\nたった5分の回想だった\n\n生きたいと思ったのが遅すぎた\n\nやり直せると思ったのが遅すぎた\n\n残酷なくらい、遅すぎた\n\n視界がぼやける\n\n空だけがやけに青かった\n\n母さん、ごめん\n\n父さん、ごめん\n\n僕、本当は死にたくなかった\n\n漫画も、もう少し描きたかった\n\n大人になってみたかった\n\n明日が見たかった\n\n生きたかった\n\n腕時計の秒針が\n\n静かに\n\n最後の一秒を刻む\n\n5分後\n\n僕は死んだ\n\nそしてそのとき初めて\n\n僕は、生きたかったのだと知った`
       }
     ];
+
+    // 日付文字列をDate型に変換
+    function parseDate(str) {
+      return new Date(str.replace(/年|月/g, '-').replace('日', ''));
+    }
+
+    let sortOrder = 'new';
+
+    function setSort(order) {
+      sortOrder = order;
+      document.getElementById('btn-new').classList.toggle('active', order === 'new');
+      document.getElementById('btn-old').classList.toggle('active', order === 'old');
+      renderList();
+    }
+
+    function renderList() {
+      const newest = novels.reduce((a, b) => parseDate(a.date) > parseDate(b.date) ? a : b);
+      const sorted = [...novels].sort((a, b) => {
+        const diff = parseDate(b.date) - parseDate(a.date);
+        return sortOrder === 'new' ? diff : -diff;
+      });
+      document.getElementById('novel-list').innerHTML = sorted.map((n) => {
+        const isNew = n === newest;
+        const idx = novels.indexOf(n);
+        return `
+          <article class="novel-card" onclick="openReader(${idx})">
+            ${isNew ? '<span class="new-badge">NEW!</span>' : ''}
+            <div class="novel-meta">
+              <span class="novel-genre">${n.genre}</span>
+              <span class="novel-date">${n.date}</span>
+              <span class="novel-date">${n.body.replace(/\s/g,'').length.toLocaleString()}文字</span>
+            </div>
+            <h2 class="novel-title">${n.title}</h2>
+            <p class="novel-synopsis">${n.synopsis}</p>
+            <span class="read-link">続きを読む →</span>
+          </article>
+        `;
+      }).join('');
+    }
 
     function updateThemeUI() {
       const isNight = document.documentElement.getAttribute('data-theme') === 'night';
       const icon = isNight ? '☀️' : '🌙';
       const label = isNight ? '昼モード' : '夜モード';
       ['theme-icon','reader-theme-icon'].forEach(id => document.getElementById(id).textContent = icon);
-      ['theme-label','reader-theme-label'].forEach(id => document.getElementById(id).textContent = label);
+      document.getElementById('theme-label').textContent = label;
     }
     function toggleTheme() {
       const isDay = document.documentElement.getAttribute('data-theme') === 'day';
@@ -143,20 +201,7 @@
       localStorage.setItem('theme', isDay ? 'night' : 'day');
       updateThemeUI();
     }
-    function renderList() {
-      document.getElementById('novel-list').innerHTML = novels.map((n, i) => `
-        <article class="novel-card" onclick="openReader(${i})">
-          <div class="novel-meta">
-            <span class="novel-genre">${n.genre}</span>
-            <span class="novel-date">${n.date}</span>
-            <span class="novel-date">${n.body.replace(/\s/g,'').length.toLocaleString()}文字</span>
-          </div>
-          <h2 class="novel-title">${n.title}</h2>
-          <p class="novel-synopsis">${n.synopsis}</p>
-          <span class="read-link">続きを読む →</span>
-        </article>
-      `).join('');
-    }
+
     let currentIndex = null;
     function getLikes(i) { return parseInt(localStorage.getItem('likes_'+i)||'0'); }
     function isLiked(i) { return localStorage.getItem('liked_'+i)==='1'; }
@@ -171,8 +216,7 @@
       localStorage.setItem('likes_'+currentIndex, getLikes(currentIndex)+1);
       localStorage.setItem('liked_'+currentIndex, '1');
       const btn = document.getElementById('heart-btn');
-      btn.classList.add('pop');
-      setTimeout(()=>btn.classList.remove('pop'),150);
+      btn.classList.add('pop'); setTimeout(()=>btn.classList.remove('pop'),150);
       updateHeartUI(currentIndex);
     }
     function getFlowers(i) { return parseInt(localStorage.getItem('flowers_'+i)||'0'); }
@@ -183,8 +227,7 @@
       if (currentIndex===null) return;
       localStorage.setItem('flowers_'+currentIndex, getFlowers(currentIndex)+1);
       const btn = document.getElementById('flower-btn');
-      btn.classList.add('pop');
-      setTimeout(()=>btn.classList.remove('pop'),150);
+      btn.classList.add('pop'); setTimeout(()=>btn.classList.remove('pop'),150);
       updateFlowerUI(currentIndex);
     }
     function openReader(index) {
@@ -208,6 +251,7 @@
       document.getElementById('reader-theme-toggle').classList.remove('visible');
       currentIndex = null;
     }
+
     const savedTheme = localStorage.getItem('theme') || 'day';
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateThemeUI();
