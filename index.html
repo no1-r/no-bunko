@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     [data-theme="day"] {
       --bg: #FDFAF6; --card-bg: #F5EFE6; --accent: #C8A47A;
       --accent2: #E8D5C0; --text: #3D2B1F; --sub: #9E7B5A; --divider: #E2D3C3;
@@ -16,101 +15,18 @@
       --bg: #1a1a2e; --card-bg: #16213e; --accent: #e0a96d;
       --accent2: #2a2a4a; --text: #e8e0d0; --sub: #a89880; --divider: #2e2e4e;
     }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Noto Sans JP', sans-serif;
-      font-weight: 300;
-      line-height: 1.8;
-      min-height: 100vh;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    /* ── ヘッダー ── */
-    header {
-      text-align: center;
-      padding: 64px 24px 48px;
-      border-bottom: 1px solid var(--divider);
-      position: relative;
-    }
-    header::after {
-      content: '';
-      display: block;
-      width: 48px;
-      height: 2px;
-      background: var(--accent);
-      margin: 24px auto 0;
-    }
-    .site-title {
-      font-family: 'Noto Serif JP', serif;
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      color: var(--text);
-    }
-    .site-subtitle {
-      margin-top: 10px;
-      font-size: 0.82rem;
-      letter-spacing: 0.22em;
-      color: var(--sub);
-      text-transform: uppercase;
-    }
-
-    /* ── テーマ切り替えボタン ── */
-    .theme-toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: var(--card-bg);
-      border: 1px solid var(--divider);
-      border-radius: 50px;
-      padding: 6px 14px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      color: var(--sub);
-      font-family: 'Noto Sans JP', sans-serif;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
-    }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; font-weight: 300; line-height: 1.8; min-height: 100vh; transition: background 0.3s, color 0.3s; }
+    header { text-align: center; padding: 64px 24px 48px; border-bottom: 1px solid var(--divider); position: relative; }
+    header::after { content: ''; display: block; width: 48px; height: 2px; background: var(--accent); margin: 24px auto 0; }
+    .site-title { font-family: 'Noto Serif JP', serif; font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 600; letter-spacing: 0.12em; color: var(--text); }
+    .site-subtitle { margin-top: 10px; font-size: 0.82rem; letter-spacing: 0.22em; color: var(--sub); text-transform: uppercase; }
+    .theme-toggle { position: absolute; top: 20px; right: 20px; background: var(--card-bg); border: 1px solid var(--divider); border-radius: 50px; padding: 6px 14px; cursor: pointer; font-size: 0.8rem; color: var(--sub); font-family: 'Noto Sans JP', sans-serif; display: flex; align-items: center; gap: 6px; transition: background 0.2s, border-color 0.2s, color 0.2s; }
     .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
-
-    /* ── メインレイアウト ── */
-    main {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 56px 24px 100px;
-    }
-    .section-label {
-      font-size: 0.72rem;
-      letter-spacing: 0.3em;
-      color: var(--sub);
-      text-transform: uppercase;
-      margin-bottom: 28px;
-    }
-
-    /* ── 小説カード ── */
+    main { max-width: 860px; margin: 0 auto; padding: 56px 24px 100px; }
+    .section-label { font-size: 0.72rem; letter-spacing: 0.3em; color: var(--sub); text-transform: uppercase; margin-bottom: 28px; }
     .novel-list { display: flex; flex-direction: column; gap: 20px; }
-    .novel-card {
-      background: var(--card-bg);
-      border: 1px solid var(--divider);
-      border-radius: 4px;
-      padding: 32px 36px;
-      cursor: pointer;
-      transition: box-shadow 0.25s, border-color 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-    .novel-card::before {
-      content: '❧';
-      position: absolute;
-      top: 16px;
-      right: 20px;
-      font-size: 1.1rem;
-      color: var(--accent2);
-    }
+    .novel-card { background: var(--card-bg); border: 1px solid var(--divider); border-radius: 4px; padding: 32px 36px; cursor: pointer; transition: box-shadow 0.25s, border-color 0.25s; position: relative; overflow: hidden; }
+    .novel-card::before { content: '❧'; position: absolute; top: 16px; right: 20px; font-size: 1.1rem; color: var(--accent2); }
     .novel-card:hover { box-shadow: 0 4px 20px rgba(200,164,122,0.18); border-color: var(--accent); }
     .novel-card:hover .novel-title { color: var(--accent); }
     .novel-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -118,44 +34,14 @@
     .novel-date { font-size: 0.72rem; color: var(--sub); }
     .novel-title { font-family: 'Noto Serif JP', serif; font-size: clamp(1.05rem, 2.5vw, 1.25rem); font-weight: 600; letter-spacing: 0.06em; margin-bottom: 14px; transition: color 0.2s; }
     .novel-synopsis { font-size: 0.88rem; color: var(--sub); line-height: 1.9; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-    .read-link { display: inline-block; margin-top: 18px; font-size: 0.78rem; letter-spacing: 0.2em; color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+    .read-link { display: inline-block; margin-top: 18px; font-size: 0.78rem; letter-spacing: 0.2em; color: var(--accent); border-bottom: 1px solid transparent; transition: border-color 0.2s; }
     .novel-card:hover .read-link { border-color: var(--accent); }
-
-    /* ── 読書ページ ── */
-    .reader-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: var(--bg);
-      z-index: 100;
-      overflow-y: auto;
-    }
+    .reader-overlay { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 100; overflow-y: auto; }
     .reader-overlay.open { display: block; }
     .reader-inner { max-width: 680px; margin: 0 auto; padding: 56px 28px 100px; }
-
-    /* 読書ページのテーマボタン（右上固定） */
-    .reader-theme-toggle {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      z-index: 200;
-      background: var(--card-bg);
-      border: 1px solid var(--divider);
-      border-radius: 50px;
-      padding: 6px 14px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      color: var(--sub);
-      font-family: 'Noto Sans JP', sans-serif;
-      display: none;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
-    }
-    .reader-overlay.open ~ .reader-theme-toggle,
+    .reader-theme-toggle { position: fixed; top: 16px; right: 16px; z-index: 200; background: var(--card-bg); border: 1px solid var(--divider); border-radius: 50px; padding: 6px 14px; cursor: pointer; font-size: 0.8rem; color: var(--sub); font-family: 'Noto Sans JP', sans-serif; display: none; align-items: center; gap: 6px; transition: background 0.2s, border-color 0.2s, color 0.2s; }
     .reader-theme-toggle.visible { display: flex; }
     .reader-theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
-
     .back-btn { background: none; border: none; font-family: 'Noto Sans JP', sans-serif; font-size: 0.78rem; letter-spacing: 0.2em; color: var(--sub); cursor: pointer; padding: 0; margin-bottom: 48px; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
     .back-btn:hover { color: var(--accent); }
     .reader-genre { font-size: 0.68rem; letter-spacing: 0.2em; color: var(--sub); background: var(--accent2); padding: 2px 10px; border-radius: 2px; display: inline-block; margin-bottom: 16px; }
@@ -164,8 +50,6 @@
     .reader-divider { width: 40px; height: 1px; background: var(--accent); margin-bottom: 36px; }
     .reader-body { font-size: 1rem; line-height: 2.2; color: var(--text); white-space: pre-wrap; }
     .reader-body p { margin-bottom: 1.6em; }
-
-    /* ── ボタンエリア ── */
     .action-area { display: flex; align-items: center; gap: 12px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--divider); flex-wrap: wrap; }
     .heart-btn { background: none; border: 1.5px solid var(--accent); border-radius: 50px; padding: 8px 20px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; gap: 6px; color: var(--sub); font-family: 'Noto Sans JP', sans-serif; transition: background 0.2s, color 0.2s, transform 0.15s; }
     .heart-btn:hover { background: var(--accent2); }
@@ -175,19 +59,11 @@
     .flower-btn { background: none; border: 1.5px solid #b57fc4; border-radius: 50px; padding: 8px 20px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; gap: 6px; color: #8a5a9a; font-family: 'Noto Sans JP', sans-serif; transition: background 0.2s, transform 0.15s; }
     .flower-btn:hover { background: #f3e6f9; }
     .flower-count { font-size: 0.82rem; color: #8a5a9a; }
-
-    /* ── フッター ── */
     footer { text-align: center; padding: 32px 24px; border-top: 1px solid var(--divider); font-size: 0.72rem; letter-spacing: 0.18em; color: var(--sub); }
-
-    @media (max-width: 600px) {
-      .novel-card { padding: 24px 20px; }
-      .reader-inner { padding: 40px 20px 80px; }
-      .theme-toggle .label { display: none; }
-    }
+    @media (max-width: 600px) { .novel-card { padding: 24px 20px; } .reader-inner { padding: 40px 20px 80px; } .theme-toggle .label { display: none; } }
   </style>
 </head>
 <body>
-
   <header>
     <button class="theme-toggle" onclick="toggleTheme()">
       <span id="theme-icon">🌙</span>
@@ -196,12 +72,10 @@
     <p class="site-subtitle">Novel Collection</p>
     <h1 class="site-title">のあーる文庫</h1>
   </header>
-
-  <main id="list-view">
+  <main>
     <p class="section-label">作品一覧</p>
     <div class="novel-list" id="novel-list"></div>
   </main>
-
   <div class="reader-overlay" id="reader-overlay">
     <div class="reader-inner">
       <button class="back-btn" onclick="closeReader()">← 一覧に戻る</button>
@@ -223,17 +97,21 @@
       <button class="back-btn" onclick="closeReader()" style="margin-top: 32px;">← 一覧に戻る</button>
     </div>
   </div>
-
-  <!-- 読書ページ用テーマボタン（固定） -->
   <button class="reader-theme-toggle" id="reader-theme-toggle" onclick="toggleTheme()">
     <span id="reader-theme-icon">🌙</span>
     <span id="reader-theme-label">夜モード</span>
   </button>
-
   <footer>&copy; 2026 のあーる文庫 ― 掲載されている作品の権利は、著作者に帰属します</footer>
-
   <script>
     const novels = [
+      {
+        title: "生活という愛",
+        genre: "恋愛",
+        date: "2026年6月14日",
+        flower: false,
+        synopsis: "恋人との日常的なやりとりをうるさく感じていた大学生の僕が、ある出来事をきっかけに、その関係の意味を少しずつ捉え直していく。",
+        body: `恋人の通知が嫌いだった\n\n　『起きた？』\n\n　七時八分\n\n　『今日、暑いらしいよ』\n\n　七時十二分\n\n　『そういえば駅前のパン屋さん、新作出たんだって』\n\n　七時十五分\n\n　パン屋の新作なんて、僕の人生に何の影響もない\n\n　どうせ夜には通話するのに、と思っていた\n\n　そのとき話せばいいことを、わざわざ細切れにして送りつけてくる\n\n　僕は通知欄を見下ろして、小さく舌打ちした\n\n　それでも返信はする\n\n　「起きた」\n\n　「へえ」\n\n　「そうなんだ」\n\n　僕の返事は、どれも賞味期限切れの相槌みたいだった\n\n　恋人は、それでも懲りなかった\n\n　『お昼なに食べるの？』\n\n　『今日の授業眠い』\n\n　『猫いた』\n\n　猫の写真が送られてくる\n\n　たしかに、驚くほど嫌そうな顔をしていた\n\n　思わず笑ってしまって、慌てて口元を引き締める\n\n　負けた気がしたからだ\n\n　何に対してなのかは、自分でもよくわからなかった\n\n　…愛されるということは、もっと劇的なものだと思っていた\n\n　花束とか、記念日とか、改札越しの抱擁とか\n\n　少なくとも、\n\n　『コンビニでアイス買った』\n\n　『歯医者行きたくない』\n\n　『電車座れた』\n\n　みたいなものではないと思っていた\n\n　そんなものは"愛"じゃなくて、ただの"生活"だ\n\n　人の暮らしが、しずくのように自分の脳へこぼれ落ちてくるだけ\n\n　だから鬱陶しかった\n\n　…ある日、通知が来なかった\n\n　昼になっても\n\n　夕方になっても\n\n　夜になっても\n\n　どうせ夜には通話するのに、と思っていたはずなのに\n\n　二十二時を過ぎても着信はなかった\n\n　僕はスマホを裏返した\n\n　また表にした\n\n　裏返した\n\n　表にした\n\n　修学旅行が楽しみで眠れない子供みたいで、ひどく馬鹿らしかった\n\n　結局、僕のほうから電話をかけた\n\n『……もしもし？』\n\n『…ごめん！スマホ壊れてた！』\n\n　受話口の向こうで、恋人は息を切らしていた\n\n『修理出してて、今やっと代替機もらえたの』\n\n「……そう」\n\n『怒ってる？』\n\n「別に」\n\n『寂しかった？』\n\n「……少し」\n\n　沈黙のあと、恋人が笑った\n\n『嬉しい』\n\n「なんで」\n\n『だって、いつも通知うるさそうだから』\n\n「うるさいよ」\n\n『え』\n\n「今日暑いね、とか」\n\n『うん』\n\n「猫いた、とか」\n\n『うん』\n\n「お昼なに食べたの、とか」\n\n『うん』\n\n「どうせ夜に通話するのに」\n\n『……うん』\n\n「でも」\n\n　言葉が止まる\n\n　愛はもっと、大きなものだと思っていた\n\n　誰かの人生を変えるような出来事とか\n\n　忘れられない記念日とか\n\n　そういうものだと\n\n　でも実際は違った\n\n　今日の昼ごはんとか\n\n　駅前の猫とか\n\n　授業中に眠かったこととか\n\n　コンビニで見つけた新作アイスとか\n\n　誰かの一日に名前をつけるには小さすぎるものばかりだった\n\n『じゃあ、お昼の写真送って』\n\n「なんで」\n\n『見たいから』\n\n「ただの学食のカレーだよ」\n\n『それでも』\n\n　通話の向こうで、恋人は笑った\n\n　僕はスマホを耳に当てたまま、明日の昼のことを考える\n\n　たぶん学食に行く\n\n　たぶんいつもの席に座る\n\n　たぶん代わり映えのしないカレーを頼む\n\n　どうせ夜には通話するのに\n\n　そんなこと、そのとき話せばいいのに\n\n　それでも、僕はきっと写真を撮る\n\n　湯気の立つカレーを、少しだけ遠くから\n\n　スプーンが写り込まないように気をつけて\n\n　もしかしたら、\n\n　「今日は唐揚げも付けた」なんて一言を添えるかもしれない\n\n　誰かに見せるほどのものじゃない\n\n　わざわざ共有するほどの出来事でもない\n\n　でも、たぶん\n\n　僕にとっての愛は、昼食の写真を送ることになった\n\n　どうせ、夜には通話するのに\n\n　それでも送ってしまうような、取るに足らないこと\n\n　そんな些細なものに形を変えて、いつの間にか僕の生活の中に居座っていた\n\n『ねえ』\n\n『明日、カレーだったら写真忘れないでね』\n\n「……わかった」\n\n　そう返事をしながら\n\n　明日は少し、美味しそうに撮れるといいなと思った`
+      },
       {
         title: "5分後に僕が死ぬ話",
         genre: "青春",
@@ -256,22 +134,17 @@
       const isNight = document.documentElement.getAttribute('data-theme') === 'night';
       const icon = isNight ? '☀️' : '🌙';
       const label = isNight ? '昼モード' : '夜モード';
-      document.getElementById('theme-icon').textContent = icon;
-      document.getElementById('theme-label').textContent = label;
-      document.getElementById('reader-theme-icon').textContent = icon;
-      document.getElementById('reader-theme-label').textContent = label;
+      ['theme-icon','reader-theme-icon'].forEach(id => document.getElementById(id).textContent = icon);
+      ['theme-label','reader-theme-label'].forEach(id => document.getElementById(id).textContent = label);
     }
-
     function toggleTheme() {
       const isDay = document.documentElement.getAttribute('data-theme') === 'day';
       document.documentElement.setAttribute('data-theme', isDay ? 'night' : 'day');
       localStorage.setItem('theme', isDay ? 'night' : 'day');
       updateThemeUI();
     }
-
     function renderList() {
-      const container = document.getElementById('novel-list');
-      container.innerHTML = novels.map((n, i) => `
+      document.getElementById('novel-list').innerHTML = novels.map((n, i) => `
         <article class="novel-card" onclick="openReader(${i})">
           <div class="novel-meta">
             <span class="novel-genre">${n.genre}</span>
@@ -284,9 +157,7 @@
         </article>
       `).join('');
     }
-
     let currentIndex = null;
-
     function getLikes(i) { return parseInt(localStorage.getItem('likes_'+i)||'0'); }
     function isLiked(i) { return localStorage.getItem('liked_'+i)==='1'; }
     function updateHeartUI(i) {
@@ -304,7 +175,6 @@
       setTimeout(()=>btn.classList.remove('pop'),150);
       updateHeartUI(currentIndex);
     }
-
     function getFlowers(i) { return parseInt(localStorage.getItem('flowers_'+i)||'0'); }
     function updateFlowerUI(i) {
       document.getElementById('flower-count').textContent = getFlowers(i) > 0 ? getFlowers(i)+' 本' : '';
@@ -317,7 +187,6 @@
       setTimeout(()=>btn.classList.remove('pop'),150);
       updateFlowerUI(currentIndex);
     }
-
     function openReader(index) {
       currentIndex = index;
       const n = novels[index];
@@ -328,29 +197,20 @@
       document.getElementById('r-body').innerHTML = n.body.split('\n\n').map(p=>`<p>${p}</p>`).join('');
       updateHeartUI(index);
       const flowerBtn = document.getElementById('flower-btn');
-      if (n.flower) {
-        flowerBtn.style.display = 'flex';
-        updateFlowerUI(index);
-      } else {
-        flowerBtn.style.display = 'none';
-        document.getElementById('flower-count').textContent = '';
-      }
+      if (n.flower) { flowerBtn.style.display='flex'; updateFlowerUI(index); }
+      else { flowerBtn.style.display='none'; document.getElementById('flower-count').textContent=''; }
       document.getElementById('reader-overlay').classList.add('open');
       document.getElementById('reader-theme-toggle').classList.add('visible');
       window.scrollTo(0,0);
     }
-
     function closeReader() {
       document.getElementById('reader-overlay').classList.remove('open');
       document.getElementById('reader-theme-toggle').classList.remove('visible');
       currentIndex = null;
     }
-
-    // 保存済みテーマを復元
     const savedTheme = localStorage.getItem('theme') || 'day';
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateThemeUI();
-
     renderList();
   </script>
 </body>
